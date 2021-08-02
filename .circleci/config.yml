@@ -1,21 +1,13 @@
-orbs:
-  node: circleci/node@4.2.1
-
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
-jobs:
-   build:
-      docker:
-        - image: docker
-      steps:
-        - setup_remote_docker:
-            docker_layer_caching: true
-        - run: docker image ls
-        - run: docker volume ls
-        - run: docker run --mount source=datastore,destination=/mnt/volume debian:bullseye-slim dd if=/dev/zero of=/mnt/volume/zero bs=32M count=32
-        - run: docker volume ls
-
+# Use a package of configuration called an orb.
+orbs:
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+# Orchestrate or schedule a set of jobs
 workflows:
-  app-tests:
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
     jobs:
-      - build
+      - welcome/run
